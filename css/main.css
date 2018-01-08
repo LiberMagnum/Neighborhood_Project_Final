@@ -1,0 +1,112 @@
+html, 
+body {
+	font-family: Arial, sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#map {
+	height: 90%;
+	width: 100%;
+	float: right;
+}
+
+#header {
+	height: 10%;
+	position: 0;
+	z-index: 1;
+	background-color: #232323;
+}
+
+#sidebar {
+	width: 25em;
+	top: 0;
+	z-index: 1;
+	position: fixed;
+	height: 100vh;
+	overflow: hidden;
+	background-color: black;
+	color: white;
+	text-align: center;
+	overflow: hidden;
+}
+
+#sidebar:hover {
+	overflow-y: scroll;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+
+#hamburger {
+	font-size: 3em;
+	color: white;
+}
+
+#menu {
+	margin-top: 50%;
+	position: relative;
+	left: 400px;
+	top: 50%;
+	cursor: pointer;
+}
+
+.text {
+	padding-left: 10px;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+	text-align: left;
+}
+
+li {
+	padding: 20px 0px 20px 10px;
+	height: 20px;
+	cursor: pointer;
+}
+
+li:hover {
+	background-color: gray;
+}
+
+img {
+	max-height: 600px;
+	max-width: 215px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-right: 5px;
+}
+
+.dropdown-tips {
+	text-align: center;
+	font-size: 15px;
+}
+
+form {
+	text-align: left;
+	padding-left: 10px;
+	padding-top: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+    h1 {
+    	font-size: 40px;
+    }
+
+    li {
+    	font-size: 30px;
+    }
+
+    #sidebar {
+    	width: 30em;
+    }
+
+    #hamburger {
+    	font-size: 30px;
+    }
+}

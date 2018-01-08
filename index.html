@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Neighborhood Map Project</title>
+
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+	<div id="header">
+		<div id="hamburger">
+			<span data-bind="click: toggleListView" id="menu">&#9776;</span>
+		</div>
+	</div>
+	<div id="sidebar">
+		<h1>Diving Spots</h1>
+		<span>Filter dive sites by distance from a specified location:</span>
+		<form data-bind="submit: findDistance">
+			<input id="search-box" type="text" placeholder="Enter address here">
+			<br>
+			<span>Maximum distance to dive site:</span>
+			<div id="selection-box">
+				<select id="max-time">
+					<option value="10">10 min</option>
+	            	<option value="15">15 min</option>
+	            	<option value="30">30 min</option>
+	            	<option value="60">1 hour</option>
+	            	<option value="120">2 hours</option>
+				</select>
+			</div>
+			<input id="go-button" type="submit" value="Go!">
+		</form>
+		<button data-bind="click: reset">Reset</button>
+		<div id="places-container">
+			<ul data-bind="foreach: locationList">
+				<li data-bind="text: $data.name, click: $root.showInfo, visible: $data.showName"></li>
+				<div class="dropdown" data-bind="visible: $data.showDropdown">
+					<img data-bind="attr: {src: $data.img}" alt="Beach View">
+					<p class="text">Review: "<span class="dropdown-tips" data-bind="text: $data.tips"></span>"</p>
+					<p class="text">Information from https://foursquare.com</p>
+				</div>
+			</ul>
+		</div>
+	</div>
+	<div id="map"></div>
+
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="js/model.js"></script>
+	<script src="js/map.js"></script>
+	<script async defer 
+		src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCPgaxmEKGJLH2IvZtAPRmsS2AixAtOEh4&v=3&callback=initMap">
+	</script>
+	<script type="text/javascript" src="js/knockout.min.js"></script>
+	<script type="text/javascript" src="js/view-model.js"></script>
+</body>
+</html>
