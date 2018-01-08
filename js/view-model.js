@@ -8,7 +8,7 @@ var DiveSpot = function(data) {
 	this.id = ko.observable('');
 	this.tips = ko.observable('');
 	this.moreInfoLink = ko.observable('');
-}
+};
 
 var viewModel = function() {
 	var self = this;
@@ -34,7 +34,7 @@ var viewModel = function() {
   			'&client_secret=STVZLJOV5WUHIZEEWPIDHN1EZ1KLRJWWPZ2DC1VHUECD01NQ' +
   			'&ll=' + this.ll +
   			'&query=' + element.name() + 
-  			'&v=20171220'
+  			'&v=20171220';
   		$.ajax({
   			url: this.search,
   			type: "GET",
@@ -54,16 +54,14 @@ var viewModel = function() {
 		  		type: "GET",
 		  		dataType: "jsonp"
 		  	}).done(function(response) {
-		  		console.log(response);
 		  		if (results.meta.code === 200) {
 			  		this.photo = response.response.venue.bestPhoto;
 			  		this.firstTip = response.response.venue.tips.groups[0].items[0].text;
 			  		this.url = response.response.venue.canonicalUrl;
-			  		console.log(this.url);
-			
-			  		if (this.photo != undefined) {
-			  			this.url = this.photo.prefix + this.photo.width + 'x' + this.photo.height 
-			  				+ this.photo.suffix;
+					
+			  		if (this.photo !== undefined) {
+			  			this.url = this.photo.prefix + this.photo.width + 'x' + this.photo.height + 
+			  				this.photo.suffix;
 			  			element.img(this.url);
 			  		}
 			  		
@@ -127,7 +125,7 @@ var viewModel = function() {
 
 	//filters locations based on distance form a given address
 	this.findDistance = function() {
-		this.googleDistance = new google.maps.DistanceMatrixService;
+		this.googleDistance = new google.maps.DistanceMatrixService();
 
 		this.timeRestraint = $('#max-time').val();
 		this.address = $('#search-box').val();
