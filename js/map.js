@@ -65,7 +65,7 @@ function initMap() {
 				alert('Could not load Google Places Service. Error Was: ' + status);
 			}
 			infowindow.setContent(self.content);
-		};
+		}
 	
 		infowindow.marker = location;
 		infowindow.open(map, location);
@@ -151,7 +151,7 @@ var filter = function(response) {
 	var maxTime = $('#max-time').val();
 	for (var i = 0; i < elements.length; i++) {
 		if (elements[i].duration.value/60 > maxTime) {
-			markers[i].setMap(null)
+			markers[i].setMap(null);
 		}
 	}
 };
