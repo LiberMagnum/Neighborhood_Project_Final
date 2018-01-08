@@ -18,6 +18,14 @@ function initMap() {
 	redMarker = makeMarkerIcon('ff0202');
 	//controls the marker colors
 	var boolean = false;
+	//create a clickhandler function to pass the individual markers to 
+	//credit to https://stackoverflow.com/questions/3037598/how-to-fix-jslint-error-dont-make-functions-within-a-loop
+	var clickHandler = function(object, infowindow) {
+		object.addListener('click', function() {
+			toggleInfoWindow(this, infowindow);
+		});
+	};
+	
 	//initialize markers array
 	for (var i = 0; i < locations.length; i++) {
 		//add new markers based on locations given in model.js
@@ -30,15 +38,12 @@ function initMap() {
 		});
 		markers.push(diveSite);
 		//open infowindow on click
-		diveSite.addListener('click', function() {
-			toggleInfoWindow(this, infoWindow);
-		});
+		clickHandler(diveSite, infoWindow);
 
 		findPlaceId(diveSite);
 
 		dictionary[locations[i].name] = diveSite;
 	}
-        
 	//add info to the infoWindow
 	function addInfoWindowContent(location, infowindow) {
 		var self = this;
