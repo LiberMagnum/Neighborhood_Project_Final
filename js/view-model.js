@@ -8,11 +8,15 @@ var DiveSpot = function(data) {
 	this.id = ko.observable('');
 	this.tips = ko.observable('');
 	this.moreInfoLink = ko.observable('');
+	this.difficulty = ko.observable(data.difficulty);
 };
 
 var ViewModel = function() {
 	var self = this;
 
+	//initialize difficulties array and selected difficulty
+	this.difficulties = possibleDifficulties;
+	this.selectedDifficulty = ko.observable(this.difficulties[0]);
 	//creates a list of locations and latlngs using observable arrays
 	this.locationList = ko.observableArray([]);
 	this.latLngs = [];
@@ -39,46 +43,56 @@ var ViewModel = function() {
   			url: this.search,
   			type: "GET",
   			dataType: "jsonp"
-  		}).done(function(results) {
+  			}).done(function(results) {
   			if (results.meta.code === 200) {
   				element.id(results.response.venues[0].id);
   			}
   			else {
   				alert('Could not load FourSquare data. Error was: ' + results.meta.errorType);
   			}
-  			$.ajax({
-		  		url: 'https://api.foursquare.com/v2/venues/'+ element.id() +
+  			self.findImageFromId(element);
+  		}).fail(function(response, errorText, error) {
+  			alert('Could not load FourSquare data. Error was: ' + errorText);
+  		});
+	};
+
+	this.findImageFromId = function(element) {
+		this.infoUrl = 'https://api.foursquare.com/v2/venues/'+ element.id() +
 		  			'?client_id=BUDS1D5K2ZIUUDJYC0KJQK4VLAPE1ETKWYJGG455Z4FJ5EFF' +
 		  			'&client_secret=STVZLJOV5WUHIZEEWPIDHN1EZ1KLRJWWPZ2DC1VHUECD01NQ' +
-		  			'&v=20171220',
-		  		type: "GET",
-		  		dataType: "jsonp"
-		  	}).done(function(response) {
-		  		if (results.meta.code === 200) {
-			  		this.photo = response.response.venue.bestPhoto;
-			  		this.firstTip = response.response.venue.tips.groups[0].items[0].text;
-			  		this.url = response.response.venue.canonicalUrl;
-					
-			  		if (this.photo !== undefined) {
-			  			this.url = this.photo.prefix + this.photo.width + 'x' + this.photo.height + 
-			  				this.photo.suffix;
-			  			element.img(this.url);
-			  		}
-			  		
-			  		if (this.firstTip !== undefined) {
-			  			element.tips(this.firstTip);
-			  		}
+		  			'&v=20171220'
+  		$.ajax({
+	 		url: this.infoUrl,
+	  		type: "GET",
+	  		dataType: "jsonp"
+	  	}).done(function(response) {
+	  		if (response.meta.code === 200) {
+		  		this.photo = response.response.venue.bestPhoto;
+		  		this.firstTip = response.response.venue.tips.groups[0].items[0].text;
+		  		this.url = response.response.venue.canonicalUrl;
+				
+		  		if (this.photo !== undefined) {
+		  			this.url = this.photo.prefix + this.photo.width + 'x' + this.photo.height + 
+		  				this.photo.suffix;
+		  			element.img(this.url);
+		  		}
+		  		
+		  		if (this.firstTip !== undefined) {
+		  			element.tips(this.firstTip);
+		  		}
 
-			  		if (this.url !== undefined) {
-			  			element.moreInfoLink(this.url);
-			  		}
-			  	
+		  		if (this.url !== undefined) {
+		  			element.moreInfoLink(this.url);
 		  		}
-		  		else {
-		  			alert('Could not load FourSquare data. Error was: ' + results.meta.errorType);
-		  		}
-		  	});
-  		});
+		  	
+	  		}
+	  		else {
+  				alert('Could not load FourSquare data. Error was: ' + response.meta.errorType);
+  			}
+
+	  	}).fail(function(response, errorText, error) {
+	  		alert('Could not load FourSquare data. Error was: ' + error);
+	  	});
 	};
 
 	this.locationList().forEach(function(location) {
@@ -88,6 +102,7 @@ var ViewModel = function() {
 	//toggles dropdown when a list item is clicked
 	this.toggleDropdown = function(element) {
 		if (element.showDropdown() === false) {
+			toggleBounce(element.name());
 			element.showDropdown(true);
 		}
 		else {
@@ -96,7 +111,6 @@ var ViewModel = function() {
 	};
 
 	this.showInfo = function(element) {
-		toggleBounce(element.name());
 		if (element.img() === '') {
 			self.toggleDropdown(element);
 		}
@@ -114,48 +128,25 @@ var ViewModel = function() {
 		if (this.list.css('display') !== 'block') {
 			this.list.css('display', 'block');
 			this.map.css('width', '100%');
-			this.icon.css('left', '400px');
 		}
 		else {
 			this.list.css('display', 'none');
 			this.map.css('width', '100%');
-			this.icon.css('left', '0%');
 		}
 	};
 
-	//filters locations based on distance form a given address
-	this.findDistance = function() {
-		this.googleDistance = new google.maps.DistanceMatrixService();
+	//filters locations based on diving difficulty
+	this.filterByDifficulty = function() {
+		var self = this;
+		self.reset();
 
-		this.timeRestraint = $('#max-time').val();
-		this.address = $('#search-box').val();
+		filter(self.selectedDifficulty());
 
-		this.googleDistance.getDistanceMatrix({
-			origins: [this.address],
-			destinations: self.latLngs,
-			travelMode: 'DRIVING'
-		}, function(response, status) {
-			if (status === google.maps.DistanceMatrixStatus.OK) {
-				filter(response);
-
-				self.locationList().forEach(function(location) {
-					if (location.showName() === false) {
-						location.showName(true);
-					}
-				});
-
-				this.elements = response.rows[0].elements;
-				this.maxTime = $('#max-time').val();
-				for (var i = 0; i < this.elements.length; i++) {
-					if (this.elements[i].duration.value/60 > maxTime) {
-						self.locationList()[i].showName(false);
-					}
-				}
+		for (var i = 0; i < self.locationList().length; i++) {
+			if (self.locationList()[i].difficulty() !== self.selectedDifficulty()) {
+				self.locationList()[i].showName(false);
 			}
-			else {
-				alert('Could not load Google Distance Matrix Service. Error was: ' + status);
-			}
-		});
+		}
 	};
 
 	//resets the markers and list view
