@@ -21,7 +21,6 @@ body {
 
 #sidebar {
 	width: 25em;
-	top: 0;
 	z-index: 1;
 	position: fixed;
 	height: 100vh;
@@ -48,7 +47,6 @@ h1 {
 #menu {
 	margin-top: 50%;
 	position: relative;
-	left: 400px;
 	top: 50%;
 	cursor: pointer;
 }
@@ -95,18 +93,33 @@ form {
 
 @media only screen and (max-width: 500px) {
     h1 {
-    	font-size: 40px;
+    	font-size: 20px;
     }
 
     li {
-    	font-size: 30px;
+    	font-size: 12px;
     }
 
     #sidebar {
-    	width: 30em;
+    	width: 200px;
     }
 
     #hamburger {
+    	font-size: 30px;
+    }
+    #menu {
+    	left: ;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    #sidebar {
+    	display: none;
+    }
+	#map {
+		width: 100%;
+	}
+	#hamburger {
     	font-size: 30px;
     }
 }
