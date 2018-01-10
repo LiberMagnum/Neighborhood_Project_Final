@@ -10,7 +10,7 @@ var DiveSpot = function(data) {
 	this.moreInfoLink = ko.observable('');
 };
 
-var viewModel = function() {
+var ViewModel = function() {
 	var self = this;
 
 	//creates a list of locations and latlngs using observable arrays
@@ -169,4 +169,4 @@ var viewModel = function() {
 	};
 };
 
-ko.applyBindings(new viewModel());
+ko.applyBindings(new ViewModel());
