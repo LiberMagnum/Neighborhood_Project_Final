@@ -71,7 +71,7 @@ function initMap() {
 				alert('Could not load Google Places Service. Error Was: ' + status);
 			}
 			infowindow.setContent(self.content);
-		};
+		}
 	
 		infowindow.marker = location;
 		infowindow.open(map, location);
