@@ -2,7 +2,7 @@
 ## Overview
 This application displays 5 diving sites on Okinawa, Japan, and 
 displays information about them. It allows the user to filter dive
-sites based on distance from a location of their choice.
+sites based on their difficulty level.
 ## Running the Application
 To run the application, download this repository and open index.html.
 ## APIs
