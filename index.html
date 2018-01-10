@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Neighborhood Map Project</title>
-	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/main.css">
 </head>
@@ -14,21 +13,14 @@
 	</div>
 	<div id="sidebar">
 		<h1>Diving Spots</h1>
-		<span>Filter dive sites by distance from a specified location:</span>
-		<form data-bind="submit: findDistance">
-			<input id="search-box" type="text" placeholder="Enter address here">
-			<br>
-			<span>Maximum distance to dive site:</span>
+		<span>Filter dive sites by difficulty:</span>
+		<form data-bind="submit: filterByDifficulty">
 			<div id="selection-box">
-				<select id="max-time">
-					<option value="10">10 min</option>
-	            	<option value="15">15 min</option>
-	            	<option value="30">30 min</option>
-	            	<option value="60">1 hour</option>
-	            	<option value="120">2 hours</option>
-				</select>
+				 <select data-bind="options: difficulties,
+                       value: selectedDifficulty,
+                       valueAllowUnset: true"></select>
+				<input id="go-button" type="submit" value="Go!">
 			</div>
-			<input id="go-button" type="submit" value="Go!">
 		</form>
 		<button data-bind="click: reset">Reset</button>
 		<div id="places-container">
