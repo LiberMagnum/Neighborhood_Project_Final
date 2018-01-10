@@ -2,6 +2,7 @@ var map;
 var dictionary = {};
 var markers = [];
 var redMarker;
+var currentMarker;
 //initialize map
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -18,15 +19,13 @@ function initMap() {
 	redMarker = makeMarkerIcon('ff0202');
 	//controls the marker colors
 	var boolean = false;
-	//create a clickhandler function to pass the individual markers to 
-	//credit to https://stackoverflow.com/questions/3037598/how-to-fix-jslint-error-dont-make-functions-within-a-loop
+	//initialize markers array
 	var clickHandler = function(object, infowindow) {
 		object.addListener('click', function() {
 			toggleInfoWindow(this, infowindow);
 		});
 	};
-	
-	//initialize markers array
+
 	for (var i = 0; i < locations.length; i++) {
 		//add new markers based on locations given in model.js
 		var diveSite = new google.maps.Marker({
@@ -34,10 +33,12 @@ function initMap() {
 		    map: map,
 		    icon: redMarker,
 		    animation: google.maps.Animation.DROP,
-		    name: locations[i].name
+		    name: locations[i].name,
+		    difficulty: locations[i].difficulty
 		});
 		markers.push(diveSite);
 		//open infowindow on click
+
 		clickHandler(diveSite, infoWindow);
 
 		findPlaceId(diveSite);
@@ -70,7 +71,7 @@ function initMap() {
 				alert('Could not load Google Places Service. Error Was: ' + status);
 			}
 			infowindow.setContent(self.content);
-		}
+		};
 	
 		infowindow.marker = location;
 		infowindow.open(map, location);
@@ -96,6 +97,11 @@ function initMap() {
     }
     //toggles the info window
     function toggleInfoWindow(marker, infowindow) {
+    	if (currentMarker !== undefined) {
+    		resetColor(currentMarker);
+    	}
+    	currentMarker = marker;
+
     	if (infowindow.getMap() !== null && infowindow.getMap() !== undefined) {
     		infowindow.close();
     		marker.setIcon(redMarker);
@@ -136,26 +142,28 @@ function initMap() {
 //called when a list element is clicked, toggles whether or not the icon bounces
 var toggleBounce = function(element) {
 	var marker = dictionary[element];
+
 	if (marker.animation !== null) {
 		marker.setAnimation(null);
 	}
 	else {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
+		window.setTimeout(function() {
+			marker.setAnimation(null);
+		}, 700);
 		map.setCenter(marker.position);
 	}
 };
 
 //filters through the markers when the form is submitted
-var filter = function(response) {
+var filter = function(selectedDifficulty) {
 	markers.forEach(function(marker) {
 		if (marker.map === null) {
 			marker.setMap(map);
 		}
 	});
-	var elements = response.rows[0].elements;
-	var maxTime = $('#max-time').val();
-	for (var i = 0; i < elements.length; i++) {
-		if (elements[i].duration.value/60 > maxTime) {
+	for (var i = 0; i < markers.length; i++) {
+		if (markers[i].difficulty !== selectedDifficulty) {
 			markers[i].setMap(null);
 		}
 	}
@@ -168,4 +176,9 @@ var markerReset = function() {
 			marker.setMap(map);
 		}
 	});
+};
+
+//resets marker color
+var resetColor = function(marker) {
+	marker.setIcon(redMarker);
 };
