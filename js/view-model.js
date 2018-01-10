@@ -60,7 +60,7 @@ var ViewModel = function() {
 		this.infoUrl = 'https://api.foursquare.com/v2/venues/'+ element.id() +
 		  			'?client_id=BUDS1D5K2ZIUUDJYC0KJQK4VLAPE1ETKWYJGG455Z4FJ5EFF' +
 		  			'&client_secret=STVZLJOV5WUHIZEEWPIDHN1EZ1KLRJWWPZ2DC1VHUECD01NQ' +
-		  			'&v=20171220'
+		  			'&v=20171220';
   		$.ajax({
 	 		url: this.infoUrl,
 	  		type: "GET",
