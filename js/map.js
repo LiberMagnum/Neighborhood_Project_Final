@@ -183,3 +183,8 @@ var markerReset = function() {
 var resetColor = function(marker) {
 	marker.setIcon(redMarker);
 };
+
+//Called when google maps api cannot be loaded
+var onMapsError = function() {
+	alert("Google Maps Service could not be loaded.");
+};
