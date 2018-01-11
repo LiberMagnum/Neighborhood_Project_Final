@@ -159,13 +159,13 @@ var toggleBounce = function(element) {
 //filters through the markers when the form is submitted
 var filter = function(selectedDifficulty) {
 	markers.forEach(function(marker) {
-		if (marker.map === null) {
-			marker.setMap(map);
+		if (marker.visible === false) {
+			marker.setVisible(true);
 		}
 	});
 	for (var i = 0; i < markers.length; i++) {
 		if (markers[i].difficulty !== selectedDifficulty) {
-			markers[i].setMap(null);
+			markers[i].setVisible(false);
 		}
 	}
 };
@@ -173,8 +173,8 @@ var filter = function(selectedDifficulty) {
 //resets the markers
 var markerReset = function() {
 	markers.forEach(function(marker) {
-		if (marker.map === null) {
-			marker.setMap(map);
+		if (marker.visible === false) {
+			marker.setVisible(true);
 		}
 	});
 };
