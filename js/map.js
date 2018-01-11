@@ -23,6 +23,7 @@ function initMap() {
 	var clickHandler = function(object, infowindow) {
 		object.addListener('click', function() {
 			toggleInfoWindow(this, infowindow);
+			map.panTo(object.getPosition());
 		});
 	};
 
